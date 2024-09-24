@@ -1,0 +1,68 @@
+<div class="card registration mt-5">
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <h5 class="mb-4">Registration</h5>
+    <div class="form-group mb-3">
+      <label class="mb-1" for="username">User Name</label>
+      <input
+        id="username"
+        class="form-control"
+        formControlName="username"
+        (input)="checkUsernameAvailability()"
+        [ngClass]="{
+          'is-invalid': f['username'].invalid && f['username'].touched
+        }"
+      />
+      <div
+        class="text-danger"
+        *ngIf="f['username'].errors?.['required'] && f['username'].touched"
+      >
+        Username is required
+      </div>
+      <div
+        class="text-danger"
+        *ngIf="f['username'].errors?.['pattern'] && f['username'].touched"
+      >
+        Must be lowercase letters or numbers, up to 20 characters.
+      </div>
+      <div
+        class="text-danger"
+        *ngIf="f['username'].errors?.['taken'] && f['username'].touched"
+      >
+        Username is already taken
+      </div>
+    </div>
+    <div class="form-group mb-4">
+      <label class="mb-1" for="country">Country</label>
+
+      <select
+        id="country"
+        formControlName="country"
+        class="form-control w-100"
+        [ngClass]="{
+          'is-invalid': f['country'].invalid && f['country'].touched
+        }"
+      >
+        <option value="" disabled>Select a country</option>
+        <option *ngFor="let country of countries" [value]="country.code">
+          {{ country.name }}
+        </option>
+      </select>
+      <div
+        class="text-danger"
+        *ngIf="f['country'].errors?.['required'] && f['country'].touched"
+      >
+        Country is required
+      </div>
+    </div>
+    <div class="text-danger mb-3" *ngIf="registerError">
+      Issue with the API, please try later
+    </div>
+    <button
+      type="submit"
+      class="btn btn-primary w-100"
+      [disabled]="registrationForm.invalid"
+    >
+      Register
+    </button>
+  </form>
+</div>
